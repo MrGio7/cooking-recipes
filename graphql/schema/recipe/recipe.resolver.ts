@@ -4,7 +4,26 @@ import { MutationCreateNewRecipeArgs } from "../types"
 const recipeResolver = {
   Query: {
     recipeList: async (_parent: any, _args: any, context: Context) => {
-      return context.prisma.recipe.findMany({ include: { Ingredients: true } })
+      const recipeList = await context.prisma.recipe.findMany({ include: { Ingredients: { include: { Ingredient: true } }, _count: true } })
+
+      const response = recipeList.map(recipe => {
+        const { id, name, source, Ingredients, preperationInstructions, preperationTimeMin, _count } = recipe
+
+        const listOfIngredientsArr = Ingredients.map(({ Ingredient }) => Ingredient.name)
+        const listOfIngredientsStr = listOfIngredientsArr.slice(0, 2).join()
+        const listOfIngredients = listOfIngredientsArr.length > 3 ? listOfIngredientsStr + "..." : listOfIngredientsStr
+
+        return {
+          id,
+          name,
+          source,
+          numberOfIngredients: _count,
+          listOfIngredients,
+          preperationInstructions
+        }
+      })
+
+
     }
   },
 
