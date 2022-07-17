@@ -14,12 +14,26 @@ const recipeType = gql`
     Ingredients: [Ingredient]
   }
 
+  input CreateNewRecipeInput {
+    name: String!
+    source: String
+    ingredients: [CreateNewRecipeIngredientsInput!]!
+    timeMin: Int!
+    instructions: String!
+  }
+
+  input CreateNewRecipeIngredientsInput {
+    name: String!
+    quantity: Int!
+    measure: CookingMeasures!
+  }
+
   extend type Query {
     recipeList: [Recipe]
   }
 
   extend type Mutation {
-    createNewRecipe: Boolean
+    createNewRecipe(input: CreateNewRecipeInput!):ID
   }
 `
 

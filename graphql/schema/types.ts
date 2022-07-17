@@ -4,6 +4,7 @@ export type InputMaybe<T> = undefined | T;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -21,6 +22,20 @@ export enum CookingMeasures {
   millilitres = 'millilitres'
 }
 
+export type CreateNewRecipeIngredientsInput = {
+  measure: CookingMeasures;
+  name: Scalars['String'];
+  quantity: Scalars['Int'];
+};
+
+export type CreateNewRecipeInput = {
+  ingredients: Array<CreateNewRecipeIngredientsInput>;
+  instructions: Scalars['String'];
+  name: Scalars['String'];
+  source?: InputMaybe<Scalars['String']>;
+  timeMin: Scalars['Int'];
+};
+
 export type Ingredient = {
   __typename?: 'Ingredient';
   Recipes?: Maybe<Array<Maybe<Recipe>>>;
@@ -35,8 +50,13 @@ export type Ingredient = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createNewRecipe?: Maybe<Scalars['Boolean']>;
+  createNewRecipe?: Maybe<Scalars['ID']>;
   root?: Maybe<Scalars['String']>;
+};
+
+
+export type MutationCreateNewRecipeArgs = {
+  input: CreateNewRecipeInput;
 };
 
 export type Query = {
@@ -130,6 +150,8 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   CookingMeasures: CookingMeasures;
+  CreateNewRecipeIngredientsInput: CreateNewRecipeIngredientsInput;
+  CreateNewRecipeInput: CreateNewRecipeInput;
   Date: ResolverTypeWrapper<Scalars['Date']>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   Ingredient: ResolverTypeWrapper<Ingredient>;
@@ -143,6 +165,8 @@ export type ResolversTypes = {
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   Boolean: Scalars['Boolean'];
+  CreateNewRecipeIngredientsInput: CreateNewRecipeIngredientsInput;
+  CreateNewRecipeInput: CreateNewRecipeInput;
   Date: Scalars['Date'];
   ID: Scalars['ID'];
   Ingredient: Ingredient;
@@ -170,7 +194,7 @@ export type IngredientResolvers<ContextType = any, ParentType extends ResolversP
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  createNewRecipe?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  createNewRecipe?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType, RequireFields<MutationCreateNewRecipeArgs, 'input'>>;
   root?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 };
 
