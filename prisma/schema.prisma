@@ -21,20 +21,29 @@ model Recipe {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
-  Ingredients Ingredient[]
+  Ingredients IngredientsForRecipe[]
 }
 
 model Ingredient {
-  id       String          @id @default(uuid())
-  name     String
-  quantity Int
-  measure  CookingMeasures
+  id   String @id @default(uuid())
+  name String @unique
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
-  Recipes Recipe[]
+  Recipes IngredientsForRecipe[]
+}
+
+model IngredientsForRecipe {
+  Recipe       Recipe          @relation(fields: [recipeId], references: [id])
+  recipeId     String
+  Ingredient   Ingredient      @relation(fields: [ingredientId], references: [id])
+  ingredientId String
+  quantity     Int
+  measure      CookingMeasures
+
+  @@id([recipeId, ingredientId])
 }
 
 enum CookingMeasures {
