@@ -3,6 +3,8 @@ import { gql } from "apollo-server";
 import fs from "fs"
 
 const root = gql`
+  scalar Date
+  
   type Query {
     root: String
   }
@@ -12,7 +14,7 @@ const root = gql`
 `
 
 const typeDefs = [root]
-let resolvers = merge({})
+let resolvers = {}
 
 const schemaPath = "graphql/schema"
 const pathList = fs.readdirSync(schemaPath)
@@ -23,10 +25,8 @@ for (const file of pathList) {
     const type = require(`./${file}/${file}.type.ts`)
     const resolver = require(`./${file}/${file}.resolver.ts`)
     typeDefs.push(type["default"])
-    resolvers = merge(resolver["default"])
+    merge(resolvers, resolver["default"])
   }
 }
-
-
 
 export { typeDefs, resolvers }

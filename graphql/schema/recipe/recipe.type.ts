@@ -14,8 +14,6 @@ const recipeType = gql`
     Ingredients: [Ingredient]
   }
 
-  
-
   extend type Query {
     recipeList: [Recipe]
   }
