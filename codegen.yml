@@ -1,0 +1,11 @@
+schema: http://localhost:4000/
+generates:
+  ./graphql/schema/types.ts:
+    plugins:
+      - typescript
+      - typescript-resolvers
+    config:
+      maybeValue: undefined | T
+      inputMaybeValue: undefined | T
+      namingConvention:
+        enumValues: keep

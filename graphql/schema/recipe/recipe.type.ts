@@ -17,6 +17,10 @@ const recipeType = gql`
   extend type Query {
     recipeList: [Recipe]
   }
+
+  extend type Mutation {
+    createNewRecipe: Boolean
+  }
 `
 
 export default recipeType
