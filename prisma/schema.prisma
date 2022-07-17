@@ -9,3 +9,37 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Recipe {
+  id                      String  @id @default(uuid())
+  name                    String
+  source                  String?
+  preperationTimeMin      Int
+  preperationInstructions String
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  Ingredients Ingredient[]
+}
+
+model Ingredient {
+  id       String          @id @default(uuid())
+  name     String
+  quantity Int
+  measure  CookingMeasures
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  Recipes Recipe[]
+}
+
+enum CookingMeasures {
+  litres
+  millilitres
+  grams
+  kilograms
+}
