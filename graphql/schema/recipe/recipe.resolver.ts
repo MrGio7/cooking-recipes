@@ -1,11 +1,32 @@
 import { Context } from "../../../server/context"
-import { MutationCreateNewRecipeArgs } from "../types"
+import { MutationCreateNewRecipeArgs, QueryRecipeListArgs } from "../types"
 import { cutText } from "./recipe.service"
 
 const recipeResolver = {
   Query: {
-    recipeList: async (_parent: any, _args: any, context: Context) => {
-      const recipeList = await context.prisma.recipe.findMany({ include: { Ingredients: { include: { Ingredient: true } }, _count: true } })
+    recipeList: async (_parent: any, args: QueryRecipeListArgs, context: Context) => {
+      const { ingredient, maxTimeMin, name } = args.filter || {}
+      const recipeList = await context.prisma.recipe.findMany({
+        where: {
+          name: { contains: name, mode: "insensitive" },
+          preperationTimeMin: { lt: maxTimeMin },
+          Ingredients: {
+            some: {
+              Ingredient: {
+                name: ingredient?.toLowerCase()
+              }
+            }
+          }
+        },
+        include: {
+          Ingredients: {
+            include: {
+              Ingredient: true
+            }
+          },
+          _count: true
+        }
+      })
 
       const response = recipeList.map(recipe => {
         const { id, name, source, Ingredients, preperationInstructions, preperationTimeMin, _count } = recipe

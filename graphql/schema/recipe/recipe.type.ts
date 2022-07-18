@@ -43,8 +43,14 @@ const recipeType = gql`
     minutes: Int!
   }
 
+  input RecipeListFilterInput {
+    ingredient: String
+    name: String
+    maxTimeMin: Int
+  }
+
   extend type Query {
-    recipeList: [CustomRecipe]
+    recipeList(filter: RecipeListFilterInput): [CustomRecipe]
   }
 
   extend type Mutation {

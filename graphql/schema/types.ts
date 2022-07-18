@@ -82,6 +82,11 @@ export type Query = {
   root?: Maybe<Scalars['String']>;
 };
 
+
+export type QueryRecipeListArgs = {
+  filter?: InputMaybe<RecipeListFilterInput>;
+};
+
 export type Recipe = {
   __typename?: 'Recipe';
   Ingredients?: Maybe<Array<Maybe<Ingredient>>>;
@@ -93,6 +98,12 @@ export type Recipe = {
   preperationTimeMin?: Maybe<Scalars['Int']>;
   source?: Maybe<Scalars['String']>;
   updatedAt: Scalars['Date'];
+};
+
+export type RecipeListFilterInput = {
+  ingredient?: InputMaybe<Scalars['String']>;
+  maxTimeMin?: InputMaybe<Scalars['Int']>;
+  name?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -177,6 +188,7 @@ export type ResolversTypes = {
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   Recipe: ResolverTypeWrapper<Recipe>;
+  RecipeListFilterInput: RecipeListFilterInput;
   String: ResolverTypeWrapper<Scalars['String']>;
 };
 
@@ -194,6 +206,7 @@ export type ResolversParentTypes = {
   Mutation: {};
   Query: {};
   Recipe: Recipe;
+  RecipeListFilterInput: RecipeListFilterInput;
   String: Scalars['String'];
 };
 
@@ -227,7 +240,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   ingredientList?: Resolver<Maybe<Array<Maybe<ResolversTypes['Ingredient']>>>, ParentType, ContextType>;
-  recipeList?: Resolver<Maybe<Array<Maybe<ResolversTypes['CustomRecipe']>>>, ParentType, ContextType>;
+  recipeList?: Resolver<Maybe<Array<Maybe<ResolversTypes['CustomRecipe']>>>, ParentType, ContextType, Partial<QueryRecipeListArgs>>;
   root?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 };
 
