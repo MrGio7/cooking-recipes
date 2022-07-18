@@ -95,10 +95,9 @@ export type QueryRecipeListArgs = {
 
 export type Recipe = {
   __typename?: 'Recipe';
-  Ingredients?: Maybe<Array<Maybe<RecipeIngredient>>>;
   createdAt: Scalars['Date'];
-  deletedAt?: Maybe<Scalars['Date']>;
   id: Scalars['ID'];
+  ingredients?: Maybe<Array<Maybe<RecipeIngredient>>>;
   name: Scalars['String'];
   preperationInstructions?: Maybe<Scalars['String']>;
   preperationTimeMin?: Maybe<Scalars['Int']>;
@@ -261,10 +260,9 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 };
 
 export type RecipeResolvers<ContextType = any, ParentType extends ResolversParentTypes['Recipe'] = ResolversParentTypes['Recipe']> = {
-  Ingredients?: Resolver<Maybe<Array<Maybe<ResolversTypes['RecipeIngredient']>>>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
-  deletedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  ingredients?: Resolver<Maybe<Array<Maybe<ResolversTypes['RecipeIngredient']>>>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   preperationInstructions?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   preperationTimeMin?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
