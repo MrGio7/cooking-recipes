@@ -16,10 +16,14 @@ export type Scalars = {
 };
 
 export enum CookingMeasures {
+  cup = 'cup',
   grams = 'grams',
   kilograms = 'kilograms',
   litres = 'litres',
-  millilitres = 'millilitres'
+  millilitres = 'millilitres',
+  piece = 'piece',
+  tablespoon = 'tablespoon',
+  teaspoon = 'teaspoon'
 }
 
 export type CreateNewRecipeIngredientsInput = {
@@ -33,18 +37,30 @@ export type CreateNewRecipeInput = {
   instructions: Scalars['String'];
   name: Scalars['String'];
   source?: InputMaybe<Scalars['String']>;
-  timeMin: Scalars['Int'];
+  time: CreateNewRecipeTimeInput;
+};
+
+export type CreateNewRecipeTimeInput = {
+  hours?: InputMaybe<Scalars['Int']>;
+  minutes: Scalars['Int'];
+};
+
+export type CustomRecipe = {
+  __typename?: 'CustomRecipe';
+  id?: Maybe<Scalars['ID']>;
+  listOfIngredients?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  numberOfIngredients?: Maybe<Scalars['Int']>;
+  preperationInstructions?: Maybe<Scalars['String']>;
+  preperationTime?: Maybe<Scalars['String']>;
+  source?: Maybe<Scalars['String']>;
 };
 
 export type Ingredient = {
   __typename?: 'Ingredient';
-  Recipes?: Maybe<Array<Maybe<Recipe>>>;
   createdAt: Scalars['Date'];
-  deletedAt?: Maybe<Scalars['Date']>;
   id: Scalars['ID'];
-  measure?: Maybe<CookingMeasures>;
   name: Scalars['String'];
-  quantity?: Maybe<Scalars['Int']>;
   updatedAt: Scalars['Date'];
 };
 
@@ -62,7 +78,7 @@ export type MutationCreateNewRecipeArgs = {
 export type Query = {
   __typename?: 'Query';
   ingredientList?: Maybe<Array<Maybe<Ingredient>>>;
-  recipeList?: Maybe<Array<Maybe<Recipe>>>;
+  recipeList?: Maybe<Array<Maybe<CustomRecipe>>>;
   root?: Maybe<Scalars['String']>;
 };
 
@@ -152,6 +168,8 @@ export type ResolversTypes = {
   CookingMeasures: CookingMeasures;
   CreateNewRecipeIngredientsInput: CreateNewRecipeIngredientsInput;
   CreateNewRecipeInput: CreateNewRecipeInput;
+  CreateNewRecipeTimeInput: CreateNewRecipeTimeInput;
+  CustomRecipe: ResolverTypeWrapper<CustomRecipe>;
   Date: ResolverTypeWrapper<Scalars['Date']>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   Ingredient: ResolverTypeWrapper<Ingredient>;
@@ -167,6 +185,8 @@ export type ResolversParentTypes = {
   Boolean: Scalars['Boolean'];
   CreateNewRecipeIngredientsInput: CreateNewRecipeIngredientsInput;
   CreateNewRecipeInput: CreateNewRecipeInput;
+  CreateNewRecipeTimeInput: CreateNewRecipeTimeInput;
+  CustomRecipe: CustomRecipe;
   Date: Scalars['Date'];
   ID: Scalars['ID'];
   Ingredient: Ingredient;
@@ -177,18 +197,25 @@ export type ResolversParentTypes = {
   String: Scalars['String'];
 };
 
+export type CustomRecipeResolvers<ContextType = any, ParentType extends ResolversParentTypes['CustomRecipe'] = ResolversParentTypes['CustomRecipe']> = {
+  id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+  listOfIngredients?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  numberOfIngredients?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  preperationInstructions?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  preperationTime?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  source?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Date'], any> {
   name: 'Date';
 }
 
 export type IngredientResolvers<ContextType = any, ParentType extends ResolversParentTypes['Ingredient'] = ResolversParentTypes['Ingredient']> = {
-  Recipes?: Resolver<Maybe<Array<Maybe<ResolversTypes['Recipe']>>>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
-  deletedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  measure?: Resolver<Maybe<ResolversTypes['CookingMeasures']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  quantity?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -200,7 +227,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   ingredientList?: Resolver<Maybe<Array<Maybe<ResolversTypes['Ingredient']>>>, ParentType, ContextType>;
-  recipeList?: Resolver<Maybe<Array<Maybe<ResolversTypes['Recipe']>>>, ParentType, ContextType>;
+  recipeList?: Resolver<Maybe<Array<Maybe<ResolversTypes['CustomRecipe']>>>, ParentType, ContextType>;
   root?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 };
 
@@ -218,6 +245,7 @@ export type RecipeResolvers<ContextType = any, ParentType extends ResolversParen
 };
 
 export type Resolvers<ContextType = any> = {
+  CustomRecipe?: CustomRecipeResolvers<ContextType>;
   Date?: GraphQLScalarType;
   Ingredient?: IngredientResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;

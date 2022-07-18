@@ -28,7 +28,7 @@ const recipeType = gql`
     name: String!
     source: String
     ingredients: [CreateNewRecipeIngredientsInput!]!
-    timeMin: Int!
+    time: CreateNewRecipeTimeInput!
     instructions: String!
   }
 
@@ -36,6 +36,11 @@ const recipeType = gql`
     name: String!
     quantity: Int!
     measure: CookingMeasures!
+  }
+
+  input CreateNewRecipeTimeInput {
+    hours: Int
+    minutes: Int!
   }
 
   extend type Query {

@@ -18,26 +18,28 @@ const recipeResolver = {
           id,
           name,
           source,
-          numberOfIngredients: _count,
+          numberOfIngredients: _count.Ingredients,
           listOfIngredients,
           preperationInstructions: cutText(preperationInstructions, 50),
           preperationTime: preperationTimeMin < 60 ? `${preperationTimeMin} minutes` : `${Math.floor(preperationTimeMin / 60)} hours ${preperationTimeMin % 60} minutes`
         }
       })
 
-
+      return response
     }
   },
 
   Mutation: {
     createNewRecipe: async (_parent: any, args: MutationCreateNewRecipeArgs, context: Context) => {
-      const { name, source, ingredients, instructions, timeMin } = args.input
+      const { name, source, ingredients, instructions, time } = args.input
+      const preperationTimeMin = (time.hours || 0) * 60 + time.minutes
+
       const recipe = await context.prisma.recipe.create({
         data: {
           name,
           preperationInstructions: instructions,
           source,
-          preperationTimeMin: timeMin,
+          preperationTimeMin,
         },
         select: {
           id: true
@@ -51,8 +53,8 @@ const recipeResolver = {
             quantity: ingredient.quantity,
             Ingredient: {
               connectOrCreate: {
-                where: { name: ingredient.name },
-                create: { name: ingredient.name }
+                where: { name: ingredient.name.toLowerCase() },
+                create: { name: ingredient.name.toLowerCase() }
               }
             },
             Recipe: { connect: { id: recipe.id } }

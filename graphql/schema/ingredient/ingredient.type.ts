@@ -4,12 +4,8 @@ const ingredientType = gql`
   type Ingredient {
     id: ID!
     name: String!
-    quantity: Int
-    measure: CookingMeasures
     createdAt: Date!
     updatedAt: Date!
-    deletedAt: Date
-    Recipes: [Recipe]
   }
   
 

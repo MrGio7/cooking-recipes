@@ -6,7 +6,7 @@ const ingredients = ["Flour", "Milk", "Oil", "Salt", "Sugar", "Eggs", "Tomatoes"
 
 async function main() {
   await prisma.ingredient.createMany({
-    data: ingredients.map((ingredient) => ({ name: ingredient })),
+    data: ingredients.map((ingredient) => ({ name: ingredient.toLowerCase() })),
     skipDuplicates: true
   })
 }
