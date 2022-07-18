@@ -5,7 +5,8 @@ import context from "./context";
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context
+  context,
+  introspection: true
 });
 
 // The `listen` method launches a web server.
