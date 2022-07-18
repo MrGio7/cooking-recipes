@@ -18,6 +18,10 @@ const root = gql`
     millilitres
     grams
     kilograms
+    teaspoon
+    tablespoon
+    cup
+    piece
   }
 `
 

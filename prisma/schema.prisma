@@ -51,4 +51,8 @@ enum CookingMeasures {
   millilitres
   grams
   kilograms
+  teaspoon
+  tablespoon
+  cup
+  piece
 }
