@@ -1,5 +1,6 @@
 import { Context } from "../../../server/context"
 import { MutationCreateNewRecipeArgs } from "../types"
+import { cutText } from "./recipe.service"
 
 const recipeResolver = {
   Query: {
@@ -19,7 +20,8 @@ const recipeResolver = {
           source,
           numberOfIngredients: _count,
           listOfIngredients,
-          preperationInstructions
+          preperationInstructions: cutText(preperationInstructions, 50),
+          preperationTime: preperationTimeMin < 60 ? `${preperationTimeMin} minutes` : `${Math.floor(preperationTimeMin / 60)} hours ${preperationTimeMin % 60} minutes`
         }
       })
 
