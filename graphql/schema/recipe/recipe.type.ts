@@ -9,9 +9,14 @@ const recipeType = gql`
     preperationInstructions: String
     createdAt: Date!
     updatedAt: Date!
-    deletedAt: Date
 
-    Ingredients: [Ingredient]
+    ingredients: [RecipeIngredient]
+  }
+
+  type RecipeIngredient {
+    name: String
+    quantity: String
+    measure: CookingMeasures
   }
 
   type CustomRecipe {
@@ -51,6 +56,7 @@ const recipeType = gql`
 
   extend type Query {
     recipeList(filter: RecipeListFilterInput): [CustomRecipe]
+    recipeById(recipeId: ID!): Recipe
   }
 
   extend type Mutation {

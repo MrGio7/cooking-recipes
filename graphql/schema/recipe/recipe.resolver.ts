@@ -1,5 +1,6 @@
 import { Context } from "../../../server/context"
-import { MutationCreateNewRecipeArgs, QueryRecipeListArgs } from "../types"
+import { convertIngredientName } from "../ingredient/ingredient.service"
+import { MutationCreateNewRecipeArgs, QueryRecipeByIdArgs, QueryRecipeListArgs } from "../types"
 import { cutText } from "./recipe.service"
 
 const recipeResolver = {
@@ -47,6 +48,36 @@ const recipeResolver = {
       })
 
       return response
+    },
+
+    recipeById: async (_parent: any, args: QueryRecipeByIdArgs, context: Context) => {
+      const { recipeId } = args
+
+      const recipe = await context.prisma.recipe.findUnique({
+        where: { id: recipeId },
+        include: {
+          Ingredients: {
+            select: {
+              measure: true,
+              quantity: true,
+              Ingredient: {
+                select: {
+                  name: true
+                }
+              }
+            }
+          }
+        }
+      })
+
+      return {
+        ...recipe,
+        ingredients: recipe?.Ingredients.map(ingredient => ({
+          name: convertIngredientName(ingredient.Ingredient.name),
+          quantity: ingredient.quantity,
+          measure: ingredient.measure
+        }))
+      }
     }
   },
 
